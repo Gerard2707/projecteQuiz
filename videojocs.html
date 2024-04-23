@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Videojocs</title>
+</head>
+<body>
+    <button id="startButton" onclick="startQuiz()">Empezar</button>
+    <button onclick="window.location.href='quiz.html'">Volver a inicio</button>
+    
+
+<script>
+    var questions = [
+        {
+            question: "Quin d’aquests objectes no es de qualitat 4 al joc de “The Binding of Isaac”?",
+            answers: ["Death Certificate", "Abel", "C-section"],
+            correctAnswer: "Abel"
+        },
+        {
+            question: "Qui d’aquests no és un Party Member al videojoc “Persona 5 Royal”?",
+            answers: ["Sakamoto", "Kamoshida", "Morgana"],
+            correctAnswer: "Kamoshida"
+        },
+        {
+            question: "Quin d’aquests no es un amulet al “Hollow Knight”?",
+            answers: ["Amulet de Hornet", "Amulet de Agulló Ràpid", "Amulet de Força fràgil"],
+            correctAnswer: "Amulet de Hornet"
+        },
+        {
+            question: "Com es diu el cinquè Panteó del “Hollow Knight”?",
+            answers: ["Panteón del Maestro", "Panteón del Sabio", "Panteón de Hallownest"],
+            correctAnswer: "Panteón de Hallownest"
+        },
+        {
+            question: "Quin d’aquests jocs no forma part de la companyia FromSoftware?",
+            answers: ["Ghost of Tsushima", "Sekiro", "Bloodborne"],
+            correctAnswer: "Ghost of Tsushima"
+        },
+        {
+            question: "Quin d’aquests personatges és un robot al videojoc “Persona 3”?",
+            answers: ["Mitsuru", "Ryoji", "Aigis"],
+            correctAnswer: "Aigis"
+        },
+        {
+            question: "Quin d’aquests no és un personatge jugable al videojoc “The Binding of Isaac”?",
+            answers: ["Adam", "Eva", "Jacobo"],
+            correctAnswer: "Adam"
+        },
+        {
+            question: "A quin objecte correspon la següent descripció: “It’s only up from there”  al videojoc “The Binding of Isaac”?",
+            answers: ["Rock bottom", "Cricket’s head", "Panteón de Hallownest"],
+            correctAnswer: "Rock bottom"
+        },
+        {
+            question: "Quin dels següents Videojocs va guanyar el premi “GOTY” l’any 2018?",
+            answers: ["Red Dead Redemption 2", "Uncharted 4", "God of War"],
+            correctAnswer: "God of War"
+        },
+        {
+            question: "Com es diu l’arma principal del videojoc “Sekiro: Shadows Die Twice”?",
+            answers: ["Onikiri", "Kusabimaru", "Ubadachi"],
+            correctAnswer: "Kusabimaru"
+        },
+       
+    ];
+
+    var nextButton;
+
+    function startQuiz() {
+        document.getElementById('startButton').style.display = 'none'; // Hide start button
+        nextQuestion();
+    }
+    
+    function nextQuestion() {
+        // Remove the next button if it exists
+        if (nextButton) {
+            document.body.removeChild(nextButton);
+            nextButton = null;
+        }
+
+        if (questions.length === 0) {
+            alert('No hay más preguntas!');
+            return;
+            
+        }
+
+        var randomQuestionIndex = Math.floor(Math.random() * questions.length); // Get a random question
+        var question = questions[randomQuestionIndex];
+        questions.splice(randomQuestionIndex, 1); // Remove the question from the array
+        displayQuestion(question);
+    }
+
+    function displayQuestion(question) {
+        var questionElement = document.createElement('div');
+        questionElement.textContent = question.question;
+
+        question.answers.forEach(function(answer) {
+            var answerElement = document.createElement('button');
+            answerElement.textContent = answer;
+            answerElement.onclick = function() {
+                if (answer === question.correctAnswer) {
+                    alert('Correcto!');
+                } else {
+                    alert('Incorrecto!');
+                }
+                questionElement.style.display = 'none'; // Hide the question
+                nextButton = document.createElement('button');
+                nextButton.textContent = 'Siguiente pregunta';
+                nextButton.onclick = nextQuestion;
+                
+                document.body.appendChild(nextButton);
+                
+            };
+            questionElement.appendChild(answerElement);
+            
+        });
+        
+        
+        document.body.appendChild(questionElement);
+    }
+</script>
+</body>
+</html>

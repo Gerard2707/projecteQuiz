@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cultura general</title>
+</head>
+<body>
+    <button id="startButton" onclick="startQuiz()">Empezar</button>
+    <button onclick="window.location.href='quiz.html'">Volver a inicio</button>
+    
+<script>
+    var questions = [
+        {
+            question: "Quan va acabar la Segona Guerra Mundial?",
+            answers: ["1918", "1939", "1945"],
+            correctAnswer: "1945"
+        },
+        {
+            question: "Qui és l’autor d”El Quijote”?",
+            answers: ["És anònim", "Miguel de Cervantes", "Federico García Lorca"],
+            correctAnswer: "Miguel de Cervantes"
+        },
+        {
+            question: "Quina és la creencia religiosa majoritària al Japó?",
+            answers: ["Budisme", "Cristianisme", "Xintoisme"],
+            correctAnswer: "Xintoisme"
+        },
+        {
+            question: "De quin estil arquitectònic és la catedral de Notre Dame?",
+            answers: ["Barròc", "Gòtic", "Romàntic"],
+            correctAnswer: "Gòtic"
+        },
+        {
+            question: "Qui va pintar “La última cena”?",
+            answers: ["Leonardo da Vinci", "Miguel Ángel", "Diego Velázquez"],
+            correctAnswer: "Leonardo da Vinci"
+        },
+        {
+            question: "Quin any va arribar Cristóbal Colón a Amèrica?",
+            answers: ["1476", "1492", "1498"],
+            correctAnswer: "1492"
+        },
+        {
+            question: "Quin és el tercer planeta del Sistema Solar?",
+            answers: ["La Terra", "Mart", "Venus"],
+            correctAnswer: "La Terra"
+        },
+        {
+            question: "Quin d’aquests no és un número primer?",
+            answers: ["1", "2", "3"],
+            correctAnswer: "1"
+        },
+        {
+            question: "Quin d’aquests triangles té els 3 costats igual?",
+            answers: ["Isòsceles ", "Escalé", "Equilàter"],
+            correctAnswer: "Equilàter"
+        },
+        {
+            question: "Quin any va ser la Revolució Francesa?",
+            answers: ["1769", "1789", "1799"],
+            correctAnswer: "1789"
+        },
+    ];
+
+    var nextButton;
+
+    function startQuiz() {
+        document.getElementById('startButton').style.display = 'none'; // Hide start button
+        nextQuestion();
+    }
+    
+    function nextQuestion() {
+        // Remove the next button if it exists
+        if (nextButton) {
+            document.body.removeChild(nextButton);
+            nextButton = null;
+        }
+
+        if (questions.length === 0) {
+            alert('No hay más preguntas!');
+            return;
+        }
+
+        var randomQuestionIndex = Math.floor(Math.random() * questions.length); // Get a random question
+        var question = questions[randomQuestionIndex];
+        questions.splice(randomQuestionIndex, 1); // Remove the question from the array
+        displayQuestion(question);
+    }
+
+    function displayQuestion(question) {
+        var questionElement = document.createElement('div');
+        questionElement.textContent = question.question;
+
+        question.answers.forEach(function(answer) {
+            var answerElement = document.createElement('button');
+            answerElement.textContent = answer;
+            answerElement.onclick = function() {
+                if (answer === question.correctAnswer) {
+                    alert('Correcto!');
+                } else {
+                    alert('Incorrecto!');
+                }
+                questionElement.style.display = 'none'; // Hide the question
+                nextButton = document.createElement('button');
+                nextButton.textContent = 'Siguiente pregunta';
+                nextButton.onclick = nextQuestion;
+                
+                document.body.appendChild(nextButton);
+                
+            };
+            questionElement.appendChild(answerElement);
+            
+        });
+        
+        
+        document.body.appendChild(questionElement);
+    }
+</script>
+</body>
+</html>
