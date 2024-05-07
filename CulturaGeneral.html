@@ -8,6 +8,10 @@
 <body>
     <button id="startButton" onclick="startQuiz()">Empezar</button>
     <button onclick="window.location.href='quiz.html'">Volver a inicio</button>
+
+    <div class="correct" id="correctRectangle" style="visibility: hidden;">Correcto</div>
+    <div class="incorrect" id="incorrectRectangle" style="visibility: hidden;">Incorrecto</div>
+    <div class="timeUp" id="timeUpRectangle" style="visibility: hidden;">¡Tiempo agotado!</div>
     
 <script>
     var questions = [
@@ -66,6 +70,7 @@
     var nextButton;
     var correct;
     var incorrect;
+    var timer;
 
     function startQuiz() {
         document.getElementById('startButton').style.display = 'none'; // Hide start button
@@ -82,10 +87,18 @@
         incorrectElement.textContent = 'Incorrectas: ' + incorrect;
         document.body.appendChild(incorrectElement);
 
+        var timerElement = document.createElement('div');
+        timerElement.id = 'timer';
+        document.body.appendChild(timerElement);
+
         nextQuestion();
     }
     
     function nextQuestion() {
+        document.getElementById('timeUpRectangle').style.visibility = 'hidden'; 
+        document.getElementById('incorrectRectangle').style.visibility = 'hidden'; 
+        document.getElementById('correctRectangle').style.visibility = 'hidden'; 
+
         // Remove the next button if it exists
         if (nextButton) {
             document.body.removeChild(nextButton);
@@ -97,27 +110,58 @@
             return;
         }
 
+        clearInterval(timer); // Clear previous timer
+
+        var timeLeft = 30; // 30 seconds
+        var timerElement = document.getElementById('timer');
+        timerElement.textContent = 'Tiempo restante: ' + timeLeft + 's';
+
+        timer = setInterval(function() {
+            timeLeft--;
+            timerElement.textContent = 'Tiempo restante: ' + timeLeft + 's';
+            if (timeLeft === 0) {
+                clearInterval(timer); // Stop the timer
+                document.getElementById('timeUpRectangle').style.visibility = 'visible'; // Hide start button
+                incorrect++;
+                document.getElementById('incorrect').textContent = 'Incorrectas: ' + incorrect;
+                nextButton = document.createElement('button');
+                nextButton.textContent = 'Siguiente pregunta';
+                nextButton.onclick = nextQuestion;
+
+                document.body.appendChild(nextButton);
+            }
+        }, 1000); // Update every second
+
         var randomQuestionIndex = Math.floor(Math.random() * questions.length); // Get a random question
         var question = questions[randomQuestionIndex];
         questions.splice(randomQuestionIndex, 1); // Remove the question from the array
+
+        // Remove previous question if exists
+        var previousQuestionElement = document.getElementById('question');
+        if (previousQuestionElement) {
+            document.body.removeChild(previousQuestionElement);
+        }
+
         displayQuestion(question);
     }
 
     function displayQuestion(question) {
         var questionElement = document.createElement('div');
+        questionElement.id = 'question';
         questionElement.textContent = question.question;
 
         question.answers.forEach(function(answer) {
             var answerElement = document.createElement('button');
             answerElement.textContent = answer;
             answerElement.onclick = function() {
+                clearInterval(timer); // Stop the timer
                 if (answer === question.correctAnswer) {
-                    alert('Correcto!');
+                    document.getElementById('correctRectangle').style.visibility = 'visible'; // Hide start button
                     correct++;
                     document.getElementById('correct').textContent = 'Correctas: ' + correct;
                     
                 } else {
-                    alert('Incorrecto!');
+                    document.getElementById('incorrectRectangle').style.visibility = 'visible'; // Hide start button
                     incorrect++;
                     document.getElementById('incorrect').textContent = 'Incorrectas: ' + incorrect;
                 }
@@ -133,8 +177,9 @@
             
         });
         
-        
         document.body.appendChild(questionElement);
+
+        
     }
 </script>
 </body>
