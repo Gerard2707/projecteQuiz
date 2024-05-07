@@ -40,7 +40,7 @@
         {
             question: "Quin gènere musical s’associa amb Axl Rose?",
             answers: ["Sabo", "Jazz", "Metal"],
-            correctAnswer: "Metal   "
+            correctAnswer: "Metal"
         },
         {
             question: "Quin cantant ha col·laborat amb Juanes?",
@@ -65,9 +65,24 @@
     ];
 
     var nextButton;
+    var correct;
+    var incorrect;
 
     function startQuiz() {
         document.getElementById('startButton').style.display = 'none'; // Hide start button
+        correct = 0;
+        incorrect = 0;
+
+        var correctElement = document.createElement('div');
+        correctElement.id = 'correct';
+        correctElement.textContent = 'Correctas: ' + correct;
+        document.body.appendChild(correctElement);
+
+        var incorrectElement = document.createElement('div');
+        incorrectElement.id = 'incorrect';
+        incorrectElement.textContent = 'Incorrectas: ' + incorrect;
+        document.body.appendChild(incorrectElement);
+
         nextQuestion();
     }
     
@@ -99,8 +114,13 @@
             answerElement.onclick = function() {
                 if (answer === question.correctAnswer) {
                     alert('Correcto!');
+                    correct++;
+                    document.getElementById('correct').textContent = 'Correctas: ' + correct;
+                    
                 } else {
                     alert('Incorrecto!');
+                    incorrect++;
+                    document.getElementById('incorrect').textContent = 'Incorrectas: ' + incorrect;
                 }
                 questionElement.style.display = 'none'; // Hide the question
                 nextButton = document.createElement('button');
