@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Musica</title>
+</head>
+<body>
+    <button id="startButton" onclick="startQuiz()">Empezar</button>
+    <button onclick="window.location.href='quiz.html'">Volver a inicio</button>
+
+    
+<script>
+    var questions = [
+        {
+            question: "De qui és la cançó “Rabiosa”?",
+            answers: ["Laura Pausini", "Shakira", "Karol G"],
+            correctAnswer: "Shakira"
+        },
+        {
+            question: " Quina d’aquests grups és colombià?",
+            answers: ["Morat", "CNCO", "Grupo Frontera"],
+            correctAnswer: "Morat"
+        },
+        {
+            question: "Entre quines dues notes només hi ha un semitò de diferència?",
+            answers: ["Re - Mi", "Mi - Fa", "Fa - Sol"],
+            correctAnswer: "Mi - Fa"
+        },
+        {
+            question: "Quin d’aquests no és un instrument de corda?",
+            answers: ["Piano", "Arpa", "Oboè"],
+            correctAnswer: "Oboè"
+        },
+        {
+            question: "Quin d’aquests no és un gènere musical?",
+            answers: ["Folk", "Funk", "Frag"],
+            correctAnswer: "Frag"
+        },
+        {
+            question: "Quin gènere musical s’associa amb Axl Rose?",
+            answers: ["Sabo", "Jazz", "Metal"],
+            correctAnswer: "Metal"
+        },
+        {
+            question: "Quin cantant ha col·laborat amb Juanes?",
+            answers: ["Pablo Lopez", "Dani Martín", "Pablo Alborán"],
+            correctAnswer: "Pablo Lopez"
+        },
+        {
+            question: "Quina cantant té més premis relacionats amb la música?",
+            answers: ["Madonna", "Beyoncé", "Lady Gaga"],
+            correctAnswer: "Beyoncé"
+        },
+        {
+            question: "A quin grup pertany la cançó “Yellow Submarine”?",
+            answers: ["Oasis", "The Rolling Stones", "The Beatles"],
+            correctAnswer: "The Beatles"
+        },
+        {
+            question: "Quina cançó és de Celine Dion?",
+            answers: ["My heart will go on", "Traitor", "August"],
+            correctAnswer: "My heart will go on"
+        },
+    ];
+
+    var nextButton;
+    var correct;
+    var incorrect;
+
+    function startQuiz() {
+        document.getElementById('startButton').style.display = 'none'; // Hide start button
+        correct = 0;
+        incorrect = 0;
+
+        var correctElement = document.createElement('div');
+        correctElement.id = 'correct';
+        correctElement.textContent = 'Correctas: ' + correct;
+        document.body.appendChild(correctElement);
+
+        var incorrectElement = document.createElement('div');
+        incorrectElement.id = 'incorrect';
+        incorrectElement.textContent = 'Incorrectas: ' + incorrect;
+        document.body.appendChild(incorrectElement);
+
+        nextQuestion();
+    }
+    
+    function nextQuestion() {
+        // Remove the next button if it exists
+        if (nextButton) {
+            document.body.removeChild(nextButton);
+            nextButton = null;
+        }
+
+        if (questions.length === 0) {
+            alert('No hay más preguntas!');
+            return;
+        }
+
+        var randomQuestionIndex = Math.floor(Math.random() * questions.length); // Get a random question
+        var question = questions[randomQuestionIndex];
+        questions.splice(randomQuestionIndex, 1); // Remove the question from the array
+        displayQuestion(question);
+    }
+
+    function displayQuestion(question) {
+        var questionElement = document.createElement('div');
+        questionElement.textContent = question.question;
+
+        question.answers.forEach(function(answer) {
+            var answerElement = document.createElement('button');
+            answerElement.textContent = answer;
+            answerElement.onclick = function() {
+                if (answer === question.correctAnswer) {
+                    alert('Correcto!');
+                    correct++;
+                    document.getElementById('correct').textContent = 'Correctas: ' + correct;
+                    
+                } else {
+                    alert('Incorrecto!');
+                    incorrect++;
+                    document.getElementById('incorrect').textContent = 'Incorrectas: ' + incorrect;
+                }
+                questionElement.style.display = 'none'; // Hide the question
+                nextButton = document.createElement('button');
+                nextButton.textContent = 'Siguiente pregunta';
+                nextButton.onclick = nextQuestion;
+                
+                document.body.appendChild(nextButton);
+                
+            };
+            questionElement.appendChild(answerElement);
+            
+        });
+        
+        
+        document.body.appendChild(questionElement);
+    }
+</script>
+</body>
+</html>
+

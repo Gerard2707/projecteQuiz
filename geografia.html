@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geografia</title>
+</head>
+<body>
+    <button id="startButton" onclick="startQuiz()">Empezar</button>
+    <button onclick="window.location.href='quiz.html'">Volver a inicio</button>
+    
+<script>
+    var questions = [
+        {
+            question: "Quina és la capital de Colombia?",
+            answers: ["Barranquilla", "Bogotà", "Medellín"],
+            correctAnswer: "Bogotà"
+        },
+        {
+            question: "Quin és el país amb menys extensió de terreny del món?",
+            answers: ["Luxemburg", "Andorra", "Ciutat del Vaticà"],
+            correctAnswer: "Ciutat del Vaticà"
+        },
+        {
+            question: "Quin d’aquests rius passa per Espanya?",
+            answers: ["Danubi", "Mississippi", "Tajo"],
+            correctAnswer: "Respuesta 3"
+        },
+        {
+            question: "Quin d’aquests països no fa frontera amb Croàcia?",
+            answers: ["Austria", "Eslovènia", "Montenegro"],
+            correctAnswer: "Austria"
+        },
+        {
+            question: "Quin és el riu més cabalós?",
+            answers: ["Amazonas", "Nilo", "Ganges"],
+            correctAnswer: "Amazonas"
+        },
+        {
+            question: "Quantes comunitats autònomes té Espanya?",
+            answers: ["15", "17", "19"],
+            correctAnswer: "17"
+        },
+        {
+            question: "Quina no és una ciutat de Portugal?",
+            answers: ["Oporto", "Vila Real", "Plasencia"],
+            correctAnswer: "Plasencia"
+        },
+        {
+            question: "Quin és el país amb més població?",
+            answers: ["Xina", "India", "Russia"],
+            correctAnswer: "India"
+        },
+        {
+            question: "Quin país no te l’anglès com a idioma oficial?",
+            answers: ["Regne Unit", "Estonia", "Irlanda"],
+            correctAnswer: "Estonia"
+        },
+        {
+            question: "Des de quin país es poden veure les Aurores Boreals?",
+            answers: ["Noruega", "Letonia", "Lituania"],
+            correctAnswer: "Noruega"
+        },
+    ];
+
+    var nextButton;
+    var correct;
+    var incorrect;
+
+    function startQuiz() {
+        document.getElementById('startButton').style.display = 'none'; // Hide start button
+        correct = 0;
+        incorrect = 0;
+
+        var correctElement = document.createElement('div');
+        correctElement.id = 'correct';
+        correctElement.textContent = 'Correctas: ' + correct;
+        document.body.appendChild(correctElement);
+
+        var incorrectElement = document.createElement('div');
+        incorrectElement.id = 'incorrect';
+        incorrectElement.textContent = 'Incorrectas: ' + incorrect;
+        document.body.appendChild(incorrectElement);
+
+        nextQuestion();
+    }
+    
+    function nextQuestion() {
+        // Remove the next button if it exists
+        if (nextButton) {
+            document.body.removeChild(nextButton);
+            nextButton = null;
+        }
+
+        if (questions.length === 0) {
+            alert('No hay más preguntas!');
+            return;
+        }
+
+        var randomQuestionIndex = Math.floor(Math.random() * questions.length); // Get a random question
+        var question = questions[randomQuestionIndex];
+        questions.splice(randomQuestionIndex, 1); // Remove the question from the array
+        displayQuestion(question);
+    }
+
+    function displayQuestion(question) {
+        var questionElement = document.createElement('div');
+        questionElement.textContent = question.question;
+
+        question.answers.forEach(function(answer) {
+            var answerElement = document.createElement('button');
+            answerElement.textContent = answer;
+            answerElement.onclick = function() {
+                if (answer === question.correctAnswer) {
+                    alert('Correcto!');
+                    correct++;
+                    document.getElementById('correct').textContent = 'Correctas: ' + correct;
+                    
+                } else {
+                    alert('Incorrecto!');
+                    incorrect++;
+                    document.getElementById('incorrect').textContent = 'Incorrectas: ' + incorrect;
+                }
+                questionElement.style.display = 'none'; // Hide the question
+                nextButton = document.createElement('button');
+                nextButton.textContent = 'Siguiente pregunta';
+                nextButton.onclick = nextQuestion;
+                
+                document.body.appendChild(nextButton);
+                
+            };
+            questionElement.appendChild(answerElement);
+            
+        });
+        
+        
+        document.body.appendChild(questionElement);
+    }
+</script>
+</body>
+</html>
